@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AuctionController extends Controller
 {
@@ -27,7 +29,36 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->only(
+            'name', 'description', 'image', 'starting_price', 'start_date', 'end_date'
+        ), [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'image' => 'required|string|max:255',
+            'starting_price' => 'required|numeric',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $end_date = Carbon::parse($request->end_date);
+        // set hours to 23:59:59
+        $end_date = $end_date->setTime(23, 59, 59);
+
+        $auction = Auction::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $request->image,
+            'starting_price' => $request->starting_price,
+            'start_date' => $request->start_date,
+            'end_date' => $end_date
+        ]);
+
+        return response()->json($auction);
+
     }
 
     /**
@@ -51,7 +82,22 @@ class AuctionController extends Controller
      */
     public function update(Request $request, Auction $auction)
     {
-        //
+        $validator = Validator::make($request->only('name', 'description', 'starting_price'), [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'starting_price' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $auction->name = $request->name;
+        $auction->description = $request->description;
+        $auction->starting_price = $request->starting_price;
+        $auction->save();
+
+        return response()->json($auction);
     }
 
     /**
@@ -62,7 +108,12 @@ class AuctionController extends Controller
      */
     public function destroy(Auction $auction)
     {
-        //
+        if ($auction) {
+            $auction->delete();
+            return response()->json(['message' => 'Auction deleted']);
+        }else{
+            return response()->json(['message' => 'Auction not found'], 404);
+        }
     }
 
     public function search(Request $request)

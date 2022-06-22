@@ -23,6 +23,9 @@ Route::group(['prefix' => 'auction', 'as' => 'auction.'], function() {
     Route::get('/', [AuctionController::class, 'index']);
     Route::get('/{auction}', [AuctionController::class, 'show']);
     Route::get('search', [AuctionController::class, 'search']);
+    Route::post('/', [AuctionController::class, 'store']);
+    Route::put('/{auction}', [AuctionController::class, 'update']);
+    Route::delete('/{auction}', [AuctionController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
