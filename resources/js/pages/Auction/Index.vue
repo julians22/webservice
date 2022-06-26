@@ -1,6 +1,5 @@
 <template>
-    <div class="container mx-auto">
-
+    <div>
         <!-- back -->
         <div class="flex justify-between items-center mb-4">
             <router-link :to="'/'" class="text-black">

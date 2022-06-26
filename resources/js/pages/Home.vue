@@ -1,21 +1,22 @@
 <template>
-    <div class="container mx-auto">
-        <h1 class="text-2xl font-mono mb-4">{{ message }}</h1>
-        <div v-if="auctions.length > 0">
-            <div class="flex flex-col">
-                <div v-for="auction in auctions" :key="auction.id" class="border border-slate-400 p-2 first:rounded-t-lg last:rounded-b-lg">
-                    <div class="mb-3">
-                        <h2 class="text-xl font-sans font-bold">{{ auction.name }}</h2>
-                        <p class="text-base mb-3">{{ auction.thumb_descriptiony }}</p>
-                        <p class="text-base font-bold">Starting Price: $ <span class="text-green-800">{{ auction.starting_price }}</span></p>
-                        <p class="text-base font-bold" v-if="auction.last_bid">Current Bid: $ {{ auction.last_bid.amount }}</p>
-                    </div>
+    <div class="">
+        <div class="prose">
+            <h1>{{ message }}</h1>
+        </div>
 
-                    <div>
-                        <router-link v-if="auth == true" :to="`/auction/${auction.id}`" class="bg-gray-400 rounded-sm text-black px-3 py-1" >Bid</router-link>
-                        <router-link v-else to="/login" class="bg-gray-400 rounded-sm text-black px-3 py-1" >Bid</router-link>
+        <div v-if="auctions.length > 0" class="mt-6">
+            <div class="flex flex-col space-y-4">
+                <div class="card bg-primary text-primary-content" v-for="auction in auctions" :key="auction.id" >
+                    <div class="card-body">
+                        <h2 class="card-title">{{ auction.name }}</h2>
+                        <p>{{ auction.thumb_description }}</p>
+                        <p> $ <span class="badge badge-info">{{ auction.starting_price }}</span></p>
+                        <p v-if="auction.last_bid"> Current Bid: $ {{ auction.last_bid.amount }}</p>
+                        <div class="card-actions justify-end">
+                            <router-link tag="button" class="btn" v-if="auth == true" :to="`/auction/${auction.id}`" >Bid</router-link>
+                            <router-link tag="button" class="btn" v-else to="/login" >Bid</router-link>
+                        </div>
                     </div>
-                    <!-- <a :href="'/auction/' + auction.id">{{ auction.name }}</a> -->
                 </div>
             </div>
         </div>
@@ -25,8 +26,8 @@
 <script>
 export default {
     data() {
-        return {
-            message: 'Welcome to Bidding App!',
+        return { 
+            message: 'Available Auctions',
             auctions: [],
             auth: false,
         }

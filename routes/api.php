@@ -38,7 +38,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::group(['prefix' => 'bid', 'as' => 'bid.'], function() {
         Route::post('/', [AuctionController::class, 'bid']);
-
         Route::get('/{id}', [AuctionController::class, 'showBid']);
     });
 });
