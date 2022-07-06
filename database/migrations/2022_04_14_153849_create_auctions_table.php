@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,8 +20,8 @@ return new class extends Migration
             $table->string('description');
             $table->string('image');
             $table->float('starting_price', 8, 2);
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('end_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
             $table->softDeletes();
         });
