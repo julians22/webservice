@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use TCG\Voyager\Models\User as ModelsUser;
 
-class User extends \TCG\Voyager\Models\User
+class User extends ModelsUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
